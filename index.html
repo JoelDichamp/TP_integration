@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Réseau</title>
+</head>
+<body>
+    <nav>
+        <div id="profil-menu">
+            Profil
+        </div>
+        <div id="mur-menu">
+            Mur
+        </div>
+    </nav>
+    <form id="manage-profil">
+        <fieldset>
+            <legend>Profil</legend>
+            <label for="p-author-name" class="p-align-right">Nom</label>
+            <input type="text" name="p-author-name" id="p-author-name" placeholder="(au moins 2 caractères)" size="35" maxlength="30" />
+            <p class="error">x</p>
+
+            <label for="p-author-firstname" class="p-align-right">Prénom</label> 
+            <input type="text" name="p-author-firstname" id="p-author-firstname" placeholder="(au moins 2 caractères)" size="35" maxlength="30" />
+            <p class="error"></p>  
+            
+            <label for="p-author-address" class="p-align-right">Adresse</label> 
+            <textarea name="p-author-address" id="p-author-address" cols="40" rows="3"></textarea>
+            <p class="error"></p> 
+
+            <label for="p-author-birthdate" class="p-align-right">Date de naissance</label> 
+            <input type="date" name="p-author-birthdate" id="p-author-birthdate" />
+            <p class="error"></p> 
+
+            <label for="p-author-tel" class="p-align-right">Téléphone</label> 
+            <input type="text" name="p-author-tel" id="p-author-tel" size="10" maxlength="10" />
+            <p class="error"></p> 
+
+            <label for="p-author-mail" class="p-align-right">e-mail</label> 
+            <input type="text" name="p-author-mail" id="p-author-mail" size="35" maxlength="80" />
+            <p class="error"></p>   
+        </fieldset>
+        <br>
+        <div class="validation">
+            <input type="submit" value="Valider">
+            <div class="msg-info"></div>
+        </div>
+        
+    </form>
+        
+    <form id="add-article">
+        <fieldset>
+            <legend>Auteur</legend>
+            <label for="author-name" class="align-right">Nom</label>
+            <input type="text" name="author-name" id="author-name" placeholder="(au moins 2 caractères)" size="35" maxlength="30" readonly />
+            <p class="error"></p>
+
+            <label for="author-firstname" class="align-right">Prénom</label> 
+            <input type="text" name="author-firstname" id="author-firstname" placeholder="(au moins 2 caractères)" size="35" maxlength="30" readonly />
+            <p class="error"></p>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>Article</legend>
+            <label for="article-title" class="align-right">Titre</label>
+            <input type="text" name="article-title" id="article-title" size="50" maxlength="80" />
+            <p class="error"></p>
+
+            <label for="article-content" class="align-right">Contenu</label>
+            <textarea name="article-content" id="article-content" cols="40" rows="3"></textarea>
+            <p class="error"></p>
+        </fieldset>
+        <br>
+        <div class="validation"> 
+            <input type="submit" value="Valider">
+            <div class="msg-info"></div>
+        </div>
+    </form>
+
+    <div id="articles"></div>
+
+    <script src="jquery-3.2.1.min.js"></script> 
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+body
+{
+	font-family: Calibri,Arial,Verdana,sans-serif;
+}
+
+nav {
+    display: flex;
+}
+
+.hidden {
+    display: none !important;
+}
+
+nav div {
+    width: 70px;
+    height: 20px;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+    background-color: rgb(208,220,224);
+    border: 2px blue solid;
+}
+
+nav div:hover {
+    cursor: pointer;
+}
+
+legend {
+	font-weight: bold;
+	color: blue;
+	margin-bottom: 0px;
+  	margin-left: 16px;
+}
+
+fieldset {
+	border: 1px solid blue;
+	border-radius: 8px;	
+}
+
+form {
+    
+	margin: auto;
+	border: 3px blue solid;
+	padding: 20px 20px 20px 20px;
+	background-color: rgb(208,220,224);
+}
+#add-article {
+    width: 460px;
+}
+#manage-profil {
+    width: 530px;
+}
+
+label {
+    display: inline-block;
+	font-weight: bold;
+    margin-right: 15px;
+    padding: 3px 0px;
+    text-align: right;
+}
+
+.align-right {
+    width: 60px;
+}
+.p-align-right {
+    width: 130px;
+}
+
+textarea {
+    vertical-align: top;
+}
+
+input[type=submit] {
+    font-weight: bold;
+    display: block;
+}
+
+.author-article {
+    color: blue;
+    font-weight: bold;
+}
+
+.date-article {
+    font-style: italic;
+}
+
+.div-article h4 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.div-article p {
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.error {
+    color: red;
+    margin: 5px 5px;
+}
+
+.validation {
+    display: flex;
+    align-items: center;
+}
+
+.msg-info {
+    margin-left: 20px;
+    color: green;
+}
+
+input[readonly] {
+    background-color: lightgray;
+}
