@@ -1,3 +1,4 @@
+var timeSlide = 300;
 var $profil_menu = $('#profil-menu');
 var $mur_menu = $('#mur-menu');
 
@@ -13,11 +14,13 @@ var article_inputs = {
 var $articles = $('#articles');
 
 var $form_manage_profil = $('#manage-profil');
-var $p_author_name, $p_author_firstname, $p_author_address, $p_author_birthdate, $p_author_tel, $p_author_mail;
+var $p_author_name, $p_author_firstname, $p_author_address, $p_author_cp, $p_author_town, $p_author_birthdate, $p_author_tel, $p_author_mail;
 var fcts_check_profil = {};
 var profil_inputs = {
     author_name_txt : '',
     author_firstname_txt : '',
+    author_cp_txt : '',
+    author_town_txt : '',
     author_address_txt : '',
     author_birthdate_txt : '',
     author_tel_txt : '',
@@ -25,11 +28,13 @@ var profil_inputs = {
 }
 
 
-function AddArticle() {
+function AddArticle(iArticle) {
+    var id = 'id="article' + iArticle + '"';
     var elements = 
-        "<div class='div-article'>" +
+        "<div class='div-article' " + id + '>' +
             "<span class='author-article'>" + article_inputs.author_firstname_txt + " " +  article_inputs.author_name_txt  + "</span>" + " le " +
-            "<span class='date-article'>" + new Date().toLocaleDateString('fr') + "</span><br>" +
+            "<span class='date-article'>" + new Date().toLocaleDateString('fr') + "</span>" +
+            "<button class='abs-btn delete-btn'></button><br>" +
             "<h4>" + article_inputs.article_title_txt + "</h4>" +
             "<p>" + article_inputs.article_content_txt + "</p>" +
         "</div>";
@@ -39,22 +44,31 @@ function AddArticle() {
 }
 
 function GetArticles() {
-    if (localStorage.nbArticles) {
-        for (var i = 0, retrieved_article; i < localStorage.nbArticles; i++) {
+    if (localStorage.maxArticle) {
+        for (var i = 0, retrieved_article; i <= localStorage.maxArticle; i++) {
              retrieved_article = localStorage.getItem("article" + i);
-             article_inputs = JSON.parse(retrieved_article);
-             AddArticle();
+            //  console.log(retrieved_article);
+            if (retrieved_article) {
+                article_inputs = JSON.parse(retrieved_article);
+                AddArticle(i);
+            }
         }
     } else {
-        localStorage.nbArticles = 0; 
+        localStorage.maxArticle = -1; 
     }
+}
+
+function CleanArticles() {
+    var $div_articles = $('#articles div');
+    $div_articles.each(function() {
+        $articles.remove($(this));
+    });
 }
 
 function InitPages() {
     $form_add_article.addClass('hidden');
     $articles.addClass('hidden');
-    $form_manage_profil.addClass('hidden');
-    GetArticles();
+    $form_manage_profil.addClass('hidden');  
 }
 InitPages();
 
@@ -91,6 +105,7 @@ function CleanError(form_name) {
 }
 
 function GetProfilName() {
+    var ok = true;
     if (localStorage.user_profil) {
         var retrieved_profil = localStorage.getItem("user_profil");
         profil_inputs = JSON.parse(retrieved_profil);
@@ -99,16 +114,26 @@ function GetProfilName() {
 
         var $firstname = $('#add-article #author-firstname');
         $firstname.val(profil_inputs.author_firstname_txt);
+    } else {
+        ok = false;
     }
+
+    return ok;
 }
 
 $mur_menu.click(function() {
-    $form_manage_profil.addClass('hidden');
-    $form_add_article.removeClass('hidden');
-    $articles.removeClass('hidden');  
-    CleanError('add-article');
-    MsgInfoAddArticle(false, '');
-    GetProfilName();
+    if (GetProfilName()) {
+        $form_manage_profil.addClass('hidden');
+        $form_add_article.removeClass('hidden');
+        $articles.removeClass('hidden');  
+        CleanError('add-article');
+        MsgInfoAddArticle(false, '');
+        CleanArticles();
+        GetArticles();
+    } else {
+        alert("Vous devez enregistrer un profil pour pouvoir créer des articles !");
+    }
+    
 });
 
 function FillFormProfil() {
@@ -133,6 +158,16 @@ function FillFormProfil() {
                 case 'p-author-address':
                     $(this).val(profil_inputs.author_address_txt); 
                     $p_author_address = $(this); 
+                break; 
+
+                case 'p-author-cp':
+                    $(this).val(profil_inputs.author_cp_txt); 
+                    $p_author_cp = $(this); 
+                break; 
+
+                case 'p-author-town':
+                    $(this).val(profil_inputs.author_town_txt); 
+                    $p_author_town = $(this); 
                 break; 
 
                 case 'p-author-birthdate':
@@ -242,13 +277,13 @@ $form_add_article.submit(function(event) {
     if (!CheckFormAddArticle()) {
         return;
     }
-    
-    AddArticle();
+
+    localStorage.maxArticle++;
+    AddArticle(localStorage.maxArticle);
 
     var str_article = JSON.stringify(article_inputs);
-    localStorage.setItem("article" + localStorage.nbArticles, str_article);
-    localStorage.nbArticles++;
-
+    localStorage.setItem("article" + localStorage.maxArticle, str_article);
+    
     MsgInfoAddArticle(true, article_inputs.article_title_txt);
 
     // $author_name.val('');
@@ -283,6 +318,30 @@ fcts_check_profil['p-author-address'] = function($input) {
     return ok;
 }
 
+fcts_check_profil['p-author-cp'] = function($input) {
+    var ok = true;
+    $p_author_cp = $input;
+    profil_inputs.author_cp_txt = $p_author_cp.val();
+    if (!/^((0[1-9])|([1-8][0-9])|(9[0-8]))[0-9]{3}$/.test($input.val())) {
+        PutError('p-author-cp', "Le code postal est incorrect !");
+        ok = false; 
+    }
+
+    return ok;
+}
+
+fcts_check_profil['p-author-town'] = function($input) {
+    var ok = true;
+    $p_author_town = $input; 
+    profil_inputs.author_town_txt = $p_author_town.val(); //.replace(/\n/g,"<br>");
+    if ($input.val() == '') {
+        PutError('p-author-town', "La ville n'a pas été renseignée !");
+        ok = false;
+    }
+
+    return ok;
+}
+
 fcts_check_profil['p-author-birthdate'] = function($input) {
     var ok = true;
     $p_author_birthdate =  $input;
@@ -309,7 +368,7 @@ fcts_check_profil['p-author-tel'] = function($input) {
     var ok = true;
     $p_author_tel = $input;
     profil_inputs.author_tel_txt = $p_author_tel.val();
-    if (!/^0[1-6][0-9]{8}$/.test($input.val())) {
+    if (!/^0[1-6][-. ]?([0-9][-. ]?){8}$/.test($input.val())) {
         PutError('p-author-tel', "Le numéro de téléphone est incorrect !");
         ok = false; 
     }
@@ -358,4 +417,38 @@ $form_manage_profil.submit(function(event) {
     $p_author_birthdate.val('');  
     $p_author_tel.val('');
     $p_author_mail.val('');  
+});
+
+var $article_to_delete = null;
+var $btn_yes = $('#btn-yes');
+var $btn_no = $('#btn-no');
+var $popup = $('#popup');
+$articles.on('click','.div-article button',function() {
+    $article_to_delete = $(this);
+    $popup.slideDown(timeSlide);
+});
+
+$btn_no.click(function() {
+    $popup.slideUp(timeSlide);
+})
+;
+$btn_yes.click(function() {
+    var div_article_to_delete = $article_to_delete.parents('.div-article');
+    var sid = div_article_to_delete.attr('id');
+    var id = sid.split("article")[1];
+    
+    if (localStorage.maxArticle == id) {
+        //chercher le nouveau max
+        var div_pred = div_article_to_delete.prev();
+        if (div_pred.length == 0) {
+            localStorage.removeItem('maxArticle');
+        } else {
+            localStorage.maxArticle = div_pred.attr('id').split("article")[1];
+        }
+    }
+
+    div_article_to_delete.remove();
+    localStorage.removeItem(sid);
+
+    $popup.slideUp(timeSlide); 
 });

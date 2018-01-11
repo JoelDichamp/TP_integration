@@ -28,15 +28,23 @@
             <p class="error"></p>  
             
             <label for="p-author-address" class="p-align-right">Adresse</label> 
-            <textarea name="p-author-address" id="p-author-address" cols="40" rows="3"></textarea>
+            <textarea name="p-author-address" id="p-author-address" cols="40" ></textarea>
             <p class="error"></p> 
+
+            <label for="p-author-cp" class="p-align-right">Code postal</label>
+            <input type="text" name="p-author-cp" id="p-author-cp" size="5" maxlength="5" />
+            <p class="error">x</p>
+
+            <label for="p-author-town" class="p-align-right">Ville</label>
+            <input type="text" name="p-author-town" id="p-author-town" size="35" maxlength="40" />
+            <p class="error">x</p>
 
             <label for="p-author-birthdate" class="p-align-right">Date de naissance</label> 
             <input type="date" name="p-author-birthdate" id="p-author-birthdate" />
             <p class="error"></p> 
 
             <label for="p-author-tel" class="p-align-right">Téléphone</label> 
-            <input type="text" name="p-author-tel" id="p-author-tel" size="10" maxlength="10" />
+            <input type="text" name="p-author-tel" id="p-author-tel" size="14" maxlength="14" />
             <p class="error"></p> 
 
             <label for="p-author-mail" class="p-align-right">e-mail</label> 
@@ -81,6 +89,14 @@
     </form>
 
     <div id="articles"></div>
+
+    <div id="popup">
+        <p>Etes-vous sûr de vouloir supprimer l'article ?</p>
+        <div id="popup-buttons">
+            <button id="btn-yes">Oui</button>
+            <button id="btn-no">Non</button>
+        </div> 
+</div>
 
     <script src="jquery-3.2.1.min.js"></script> 
     <script src="app.js"></script>
